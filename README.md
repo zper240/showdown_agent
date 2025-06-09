@@ -18,9 +18,11 @@ The only exception is you are NOT allowed to utilise Machine Learning as that is
 The full details of the assignment marking and expectations of the report are laid out on Canvas:
 
 ## Setup
-The following instructions will enable you setup and run the basic random example agent and guide you on how to then create your own agent. These instructions will default to using a folder called "~/compsys726" but you may pull these package into any directory you desire.
+The following instructions will enable you setup and run the basic random example agent and guide you on how to then create your own agent. These instructions will default to using a folder called "~/compsys726" but you may pull these package into any directory you desire. 
 
 The assignment has been developed for python3.10 and it is recommended you use a python virtual environment for working on this assignment. I recommend pyenv but you can use whichever you are fimilar with. 
+
+These instructions are written based on using Ubuntu 22.04 but will suffice for Windows/MAC users as well - but may require changes to certain commands. Any specific issues with following these instructions please message the teaching staff on Slack.
 
 ![Python](https://img.shields.io/badge/python-3.10-blue.svg)
 
@@ -49,6 +51,28 @@ node pokemon-showdown start --no-security
 ```
 cd ~/compsys726
 git clone https://github.com/UoA-CARES/compsys726_pokenv_agent.git
+```
+
+### Create Virtual Environment (Optional)
+It is strongly recommended that you use a virtual environment to better control the requirements used in this project.
+The instructions below will show you how to create a pyenv environment - you are free to use your preference of virtual environment though.
+
+```
+python3 -m venv ~/venv/pokemon
+```
+
+Remember to activate the virtual environment every time you open a new tab to load the right environment. 
+
+```
+source ~/venv/pokemon/bin/activate
+```
+
+**Pro tip** on Ubuntu you can put this inside of the **~/.bashrc** with an alias command to make this easier. 
+The example below will activate the environment through the **pkm** command. 
+
+```
+echo "alias pkm='source ~/venv/pokemon/bin/activate'" >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ### Install Requirements
@@ -167,7 +191,29 @@ Create a folder using your ***upi*** as the name. Copy your **requirements.txt**
 The agents will be evaluated against the various generic bots designed to be at "easy" to "hard" difficulty levels. The marks will be determined based on the evaluations run offline by the teaching team. Your agent will have a chance to score bonus marks based on its placement in the class competition described below.
 
 ## Bot Tournament
+Your agent will be evaluated based on its performance against the generic bots through **expert_main.py**. 
+You can run this locally using the instructions above to get an indication of your mark and metrics for your report. 
+The **final mark** used for your grade will be scored from running the code locally by the teaching staff. 
+The breakdown of marks is shown below based on your position in the tournmanet with the bots.
 
+| **Placement** | **Marks**       |
+|---------------|-----------------|
+| 1             | 10.0%           |
+| 2             | 9.5%            |
+| 3             | 9.0%            |
+| 4             | 8.5%            |
+| 5             | 8.0%            |
+| 6             | 7.5%            |
+| 7             | 7.0%            |
+| 8             | 6.5%            |
+| 9             | 6.0%            |
+| 10            | 5.5%            |
+| 11            | 5.0%            |
+| 12            | 4.0%            |
+| 13            | 3.0%            |
+| 14            | 2.0%            |
+| 15            | 1.0%            |
+| 16            | 0.0%            |
 
 ## Class Competition
 The class competition will assess the quality of your expert agent against the the rest of the class. This is also a chance to earn ***bonus*** marks by potentially placing the top 16 winners overall.
