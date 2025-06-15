@@ -89,7 +89,7 @@ pip install -r requirements.txt
 The final step is renaming the players agent **rename.py** to **upi**.py, e.g. hwil292.py.
 
 ```
-cd ~/compsys726/compsys726_pokenv_agent
+cd ~/compsys726/compsys726_pokenv_agent/pokeenv/scripts/players
 mv rename.py "your_upi_goes_here".py
 ```
 

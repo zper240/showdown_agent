@@ -274,6 +274,12 @@ def generate_bots(num_bots: int):
         module_path = os.path.join(bot_folders, module_name)
 
         spec = importlib.util.spec_from_file_location(module_name, module_path)
+        if spec is None or spec.loader is None:
+            print(f"⚠️ Could not load module {module_name}. Skipping.")
+            raise ImportError(
+                f"Could not load module {module_name}. Please check the file path."
+            )
+
         module = importlib.util.module_from_spec(spec)
 
         sys.modules[module_name] = module
