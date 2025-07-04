@@ -15,6 +15,6 @@ dist/
 .DS_Store
 rl_logs/
 .vscode/
-pokenv/scripts/replays/*
-pokenv/scripts/results/*
+pokeenv/scripts/replays/*
+pokeenv/scripts/results/*
 

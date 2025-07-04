@@ -17,7 +17,11 @@ The only exception is you are NOT allowed to utilise Machine Learning as that is
 
 The full details of the assignment marking and expectations of the report are laid out on Canvas:
 
-## Setup
+<p align="center">
+    <img src="./media/in-game.png" style="width: 80%;" />
+</p>
+
+# Setup
 The following instructions will enable you setup and run the basic random example agent and guide you on how to then create your own agent. These instructions will default to using a folder called "~/compsys726" but you may pull these package into any directory you desire. 
 
 The assignment has been developed for python3.10 and it is recommended you use a python virtual environment for working on this assignment. I recommend pyenv but you can use whichever you are fimilar with. 
@@ -26,34 +30,14 @@ These instructions are written based on using Ubuntu 22.04 but will suffice for 
 
 ![Python](https://img.shields.io/badge/python-3.10-blue.svg)
 
-### Base Folder
+## Base Folder
 Create the base folder for working with this assignment. If you wish to change which directory you set this assignment up in, please make sure to read the following instructions carefully to avoid putting things in the wrong place. 
 
 ```
 mkdir ~/compsys726
 ```
 
-### Install Pokemon Showdown
-Clone and install the Pokemon Showdown server for running and testing locally. 
-
-```
-cd ~/compsys726
-git clone https://github.com/smogon/pokemon-showdown.git
-cd pokemon-showdown
-npm install
-cp config/config-example.js config/config.js
-node pokemon-showdown start --no-security
-```
-
-### Clone the Repository
-`git clone` the repository into your desired directory on your local machine
-
-```
-cd ~/compsys726
-git clone https://github.com/UoA-CARES/compsys726_pokenv_agent.git
-```
-
-### Create Virtual Environment (Optional)
+## Create Virtual Environment (Optional)
 It is strongly recommended that you use a virtual environment to better control the requirements used in this project.
 The instructions below will show you how to create a pyenv environment - you are free to use your preference of virtual environment though.
 
@@ -75,7 +59,27 @@ echo "alias pkm='source ~/venv/pokemon/bin/activate'" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-### Install Requirements
+## Install Pokemon Showdown
+Clone and install the Pokemon Showdown server for running and testing locally. 
+
+```
+cd ~/compsys726
+git clone https://github.com/smogon/pokemon-showdown.git
+cd pokemon-showdown
+npm install
+cp config/config-example.js config/config.js
+node pokemon-showdown start --no-security
+```
+
+## Clone the Repository
+`git clone` the repository into your desired directory on your local machine
+
+```
+cd ~/compsys726
+git clone https://github.com/UoA-CARES/compsys726_pokenv_agent.git
+```
+
+## Install Requirements
 To run this package you must first install the required python packages. These packages are the base packages required to run the minimal example, you will most likely need to install additional packages to complete the assignment.
 
 Run `pip3 install -r requirements.txt` in the **root directory** of the package.
@@ -85,7 +89,7 @@ cd ~/compsys726/compsys726_pokenv_agent
 pip install -r requirements.txt
 ```
 
-### Rename Agent
+## Rename Agent
 The final step is renaming the players agent **rename.py** to **upi**.py, e.g. hwil292.py.
 
 ```
@@ -93,7 +97,7 @@ cd ~/compsys726/compsys726_pokenv_agent/pokeenv/scripts/players
 mv rename.py "your_upi_goes_here".py
 ```
 
-## Usage
+# Usage
 To run this package you can simply call **expert_main.py** - this will run your agent against the default generic bots and produce the head-to-head results. The initial example agent will choose random moves.
 
 ```
@@ -151,7 +155,7 @@ IVs: 0 Atk
 """
 ```
 # Submission
-You will submit your agent code **upi.py** and **requirements.txt** through the instructions below to the given Google Drive. No other files will be utilised - the code needs to be self sufficient within **upi.py** and all additional package requirements must be captured in the **requirements.txt**. Failure to do this correctly will lead to a score of zero - test scripts are provided to make sure you have correctly set things up.
+You will submit your agent code **upi.py** and **requirements.txt** through the instructions below to the given Google Drive. No other files will be utilised - the code needs to be self sufficient within **upi.py** and all additional package requirements must be captured in the **requirements.txt**. Failure to do this correctly may lead to a score of zero - test scripts are provided to make sure you have correctly set things up.
 
 ## Step 1 - Create requirements.txt
 You need to create a requirements.txt that contains all the python packages you are using for your expert agent.

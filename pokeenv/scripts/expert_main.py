@@ -38,6 +38,10 @@ def gather_players():
 
     players = []
 
+    replay_dir = os.path.join(os.path.dirname(__file__), "replays")
+    if not os.path.exists(replay_dir):
+        os.makedirs(replay_dir)
+
     for module_name in os.listdir(player_folders):
         if module_name.endswith(".py"):
             module_path = f"{player_folders}/{module_name}"
@@ -51,16 +55,24 @@ def gather_players():
             # Get the class
             if hasattr(module, "CustomAgent"):
                 # Check if the class is a subclass of Player
+
+                player_name = f"{module_name[:-3]}"
+
                 agent_class = getattr(module, "CustomAgent")
 
-                config_name = f"{module_name[:-3]}"
-                account_config = AccountConfiguration(config_name, None)
-                players.append(
-                    agent_class(
-                        account_configuration=account_config,
-                        battle_format="gen9ubers",
-                    )
+                agent_replay_dir = os.path.join(replay_dir, f"{player_name}")
+                if not os.path.exists(agent_replay_dir):
+                    os.makedirs(agent_replay_dir)
+
+                account_config = AccountConfiguration(player_name, None)
+                player = agent_class(
+                    account_configuration=account_config,
+                    battle_format="gen9ubers",
                 )
+
+                player._save_replays = agent_replay_dir
+
+                players.append(player)
 
     return players
 
@@ -183,9 +195,7 @@ def main():
                 player_rank = rank
                 player_mark = mark
 
-        print(
-            f"{player.username} ranked #{player_rank} with a win rate of {winrate:.2f} and mark {mark}\n"
-        )
+        print(f"{player.username} ranked #{player_rank} with a mark of {player_mark}\n")
 
         with open(results_file, "a", encoding="utf-8") as file:
             file.write(f"{player.username} #{player_rank} {player_mark}\n")
