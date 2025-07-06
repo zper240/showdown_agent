@@ -93,7 +93,7 @@ pip install -r requirements.txt
 The final step is renaming the players agent **rename.py** to **upi**.py, e.g. hwil292.py.
 
 ```
-cd ~/compsys726/showdown_agent/pokeenv/scripts/players
+cd ~/compsys726/showdown_agent/showdown_agent/scripts/players
 mv rename.py "your_upi_goes_here".py
 ```
 
@@ -101,7 +101,7 @@ mv rename.py "your_upi_goes_here".py
 To run this package you can simply call **expert_main.py** - this will run your agent against the default generic bots and produce the head-to-head results. The initial example agent will choose random moves.
 
 ```
-cd ~/compsys726/showdown_agent
+cd ~/compsys726/showdown_agent/scripts
 python expert_main.py
 ```
 
