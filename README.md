@@ -71,7 +71,7 @@ npm install
 cp config/config-example.js config/config.js
 ```
 
-## Run Pokemonw Showdown
+## Run Pokemon Showdown
 Make sure the Pokemon Showdown server is always running when you are testing.
 If things break or don't connect then restarting the server can sometimes fix things.
 
