@@ -1,4 +1,4 @@
-from poke_env.battle import AbstractBattle
+from poke_env.battle import AbstractBattle, Effect, EmptyMove, Field, Move, MoveCategory, PokemonType, SideCondition, Status, Target, Weather
 from poke_env.player import Player
 
 team = """
@@ -70,9 +70,20 @@ IVs: 0 Spe
 """
 
 
+
 class CustomAgent(Player):
+    
     def __init__(self, *args, **kwargs):
         super().__init__(team=team, *args, **kwargs)
+        for pokemon in self._team._mons:
+            print(pokemon.species)
 
     def choose_move(self, battle: AbstractBattle):
+        if battle._turn < 4:
+            print("Opponent Team:")
+            print(battle._opponent_team)
+            self._first_move = False
+            print(battle._opponent_side_conditions)
+            print(battle._weather)
+            print(battle._fields)
         return self.choose_random_move(battle)
