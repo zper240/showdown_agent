@@ -2,7 +2,7 @@ from poke_env.battle import AbstractBattle, Battle, Effect, EmptyMove, Field, Mo
 from poke_env.player import Player
 from poke_env.player.battle_order import BattleOrder, DefaultBattleOrder, DoubleBattleOrder, SingleBattleOrder
 from typing import Optional
-from poke_env.calc.damage_calc_gen9 import calculate_damage
+from copy import deepcopy
 
 team = """
 Crunchie (Landorus-Therian) @ Rocky Helmet  
@@ -13,7 +13,7 @@ EVs: 252 Atk / 4 SpD / 252 Spe
 Jolly Nature  
 - Stealth Rock  
 - Earthquake  
-- U-turn  
+- Taunt  
 - Stone Edge  
 
 Ballet (Arceus-Fairy) @ Pixie Plate  
@@ -23,7 +23,7 @@ Tera Type: Water
 EVs: 240 HP / 252 Def / 16 Spe  
 Bold Nature  
 - Judgment  
-- Thunder Wave  
+- Earth Power  
 - Dragon Tail  
 - Recover  
 
@@ -43,6 +43,7 @@ Shiny: Yes
 Tera Type: Poison  
 EVs: 248 HP / 164 Def / 80 SpA / 16 Spe  
 Bold Nature  
+IVs: 0 Atk  
 - Origin Pulse  
 - Thunder  
 - Calm Mind  
@@ -76,7 +77,11 @@ class CustomAgent(Player):
     def __init__(self, *args, **kwargs):
         self.opp_switch_team: bool = False
         self.switch_guesses: list[tuple[float, bool]] = []
-        self.lead_mons: list[Pokemon] = [Pokemon(9, species='Landorus-Therian'),Pokemon(9, species='Glimmora'),Pokemon(9, species='Great Tusk'),Pokemon(9, species='')]
+        self.turns = []
+        self.last_turn = 0
+        self.record_guess = True
+        self.last_move: Optional[SingleBattleOrder] = None
+        self.lead_mons: list[Pokemon] = [Pokemon(9, species='Landorus-Therian'),Pokemon(9, species='Glimmora'),Pokemon(9, species='Great Tusk'),Pokemon(9, species='Deoxys-Speed')]
         print(self.lead_mons)
         super().__init__(team=team, *args, **kwargs)
         
@@ -95,41 +100,142 @@ class CustomAgent(Player):
         if battle._turn == 1:
             self.opp_switch_team = False
             self.switch_guesses = []
-        
-        # Analyse last move
-        else:
-            print(battle_obj.observations)
+            self.turns = [self.TurnState(battle_obj)]
+            print()
+            print()
             
+        # Check if switch team and record turn
+        elif self.last_turn != battle_obj.turn:
+            self.record_guess = True
+            self.switch_guesses[-1] = (self.switch_guesses[0],self.turns[-1].opp_switched(self.turns[-2],self.last_move != self.create_order(Move('dragontail',9))))
+            self.turns.append(self.TurnState(battle_obj))
+            if not self.opp_switch_team:
+                self.opp_switch_team = self.turns[-1].opp_switched(self.turns[-2],self.last_move != self.create_order(Move('dragontail',9)))
+            if self.turns[-1].mon_fainted(self.turns[-2]):
+                print("Mon fainted!")
             
         if battle_obj.active_pokemon != None and battle_obj.opponent_active_pokemon != None and not battle_obj.active_pokemon.fainted:
             
-            # Get damage for all moves
-            highest_move: Move = list(battle_obj.active_pokemon.moves.values())[0]
-            highest_dam: float = -1.0
-            for move in battle_obj.available_moves:
-                possible_dam: float = self.estimate_damage(battle_obj.active_pokemon, battle_obj.opponent_active_pokemon, move, battle_obj)
-                if possible_dam > highest_dam:
-                    highest_move = move
-                    highest_dam = possible_dam
-                    
-            if highest_dam != -1.0:
-                action = self.create_order(highest_move)
+            # Get best move:
+            dam_move: Move = self.get_best_move(battle)
+            
+            # Get best switch
+            switch = self.get_ideal_switch(battle)
+            
+            # Make move
+            if dam_move != None:
+                action = self.create_order(dam_move)
             else:
                 # action = switch
                 action = self.choose_random_move(battle)
         
         else:
             action = self.choose_random_move(battle)
-    
+
+        self.last_move = action
+        
+        print(action)
         return action
     
-    def get_ideal_switch(self, battle: Battle, opp_switch: bool) -> Optional[Pokemon]:
+    def get_best_move(self, battle: Battle) -> Optional[Move]:
+        '''
+        Gets the highest damaging move
+        
+        Args:
+            battle (Battle): The current battle object
+        Returns:
+            Optional[Move]: The highest damaging move.
+        '''
+        # Get damage for all moves
+        highest_move: Move = list(battle.active_pokemon.moves.values())[0]
+        highest_dam: float = -1.0
+        for move in battle.available_moves:
+            possible_dam: float = self.estimate_damage(battle.active_pokemon, battle.opponent_active_pokemon, move, battle)
+            if possible_dam > highest_dam:
+                highest_move = move
+                highest_dam = possible_dam
+                
+        if highest_dam != -1.0:
+            return highest_move
+        else:
+            return None
+    
+    def should_switch(self, battle: Battle, mon: Optional[Pokemon]) -> bool:
+        '''
+        Calculates if you should switch or not
+        
+        Args:
+            battle (Battle): The current battle object
+            mon (Pokemon): Pokemon to switch into
+        Returns:
+            bool: True if you should switch
+        '''
+        # Compare this switch to current pokemon
+        if mon.species == battle.active_pokemon.species or mon == None:
+            return False
+        
+        # Check if Pokemon will die from hazards or will kill opponents pokemon on
+        hazard_penalty: float = 0
+        if battle.side_conditions.get("stealthrock"):
+            rock_mult: float = max(battle.active_pokemon.damage_multiplier(PokemonType.ROCK), 1)
+            hazard_penalty += 0.125 * rock_mult
+        if battle.side_conditions.get("spikes"):
+            layers = battle.side_conditions["spikes"]
+            match layers:
+                case 1:
+                    hazard_penalty += 1/8
+                case 2:
+                    hazard_penalty += 1/6
+                case 3:
+                    hazard_penalty += 1/4
+                case _:
+                    pass
+        if hazard_penalty >= battle.active_pokemon.current_hp_fraction:
+            return False
+        if (self.estimate_damage(battle.active_pokemon, battle.opponent_active_pokemon, self.get_best_move(battle), battle) > (self.estimate_stats(battle.opponent_active_pokemon)['hp'] * battle.opponent_active_pokemon.current_hp_fraction)) and ((battle.active_pokemon.stats['spe'] > self.estimate_stats(battle.opponent_active_pokemon)['spe']) ^ (not battle.fields.get("trickroom", 0) > 0)):
+            return False
+        
+        # Get switch score
+        eval_against: Optional[Pokemon] = battle.active_pokemon if self.will_opponent_switch(battle) > 0.6 else self.guess_opponent_switch(battle)
+        cur_sc: float = self.get_switch_score(battle, battle.active_pokemon)
+        swi_sc: float = self.get_switch_score(battle, mon)
+        
+        # If switch score is much higher than current score, switch
+        if cur_sc > swi_sc + 1 or cur_sc > 2 * swi_sc:
+            return True
+        
+        # Get opp_mult ratio and mon_mult ratio
+        mon_mult: float = self.get_best_mult(eval_against, mon) # How good my pokemon is against their's
+        opp_mult: float = self.get_best_mult(mon, eval_against) # How good their pokemon is against mine
+        cur_mon_mult: float = self.get_best_mult(eval_against, battle.active_pokemon) # How good my pokemon is against their's
+        cur_opp_mult: float = self.get_best_mult(battle.active_pokemon, eval_against) # How good their pokemon is against mine
+        mon_mult_rat: float = (mon_mult/cur_mon_mult) # How much better the switch is for me (atk)
+        opp_mult_rat: float = (opp_mult/cur_opp_mult) # How much better the switch is for them (atk)
+        
+        # Evaluate
+        if opp_mult_rat > 1 and mon_mult_rat < 8:
+            return False
+        elif cur_mon_mult >= 2 and cur_opp_mult < 1:
+            return False
+        elif opp_mult_rat == 1 and mon_mult_rat >= 4:
+            return True
+        elif opp_mult_rat == 1 and opp_mult <= 1 and mon_mult_rat >= 2 and mon_mult >= 2 and self.estimate_stats(eval_against)['spe'] < mon.stats['spe']:
+            return True
+        elif opp_mult_rat <= 0.5 and opp_mult < 0.5 and mon_mult >= 1:
+            return True
+        elif opp_mult_rat < 0.5:
+            return True
+        elif cur_mon_mult < 0.5 and mon_mult_rat > 1:
+            return True
+        else:
+            return False
+        
+    def get_ideal_switch(self, battle: Battle) -> Optional[Pokemon]:
         '''
         Identifies the ideal pokemon to switch.
         
         Args:
             battle (Battle): The current battle object
-            opp_switch (bool): True if evaluating for opponent
         Returns:
             Optional[Pokemon]: Returns the best pokemon to switch into. Returns None if there are no pokemon remaining to switch into.
         '''
@@ -137,31 +243,30 @@ class CustomAgent(Player):
         switch: Optional[Pokemon] = None
         
         # Iterate through all Pokemon
-        for mon in (battle.opponent if opp_switch else battle.available_switches):
+        for mon in battle.available_switches:
             
             # Check if there are any switches avaialble
             if switch == None:
                 switch = mon
             else:
-                if self.get_switch_score(battle, switch, False) < self.get_switch_score(battle, mon, False):
+                if self.get_switch_score(battle, switch) < self.get_switch_score(battle, mon):
                     switch = mon
         
         # Return switch
         return switch
                 
-    def get_switch_score(self, battle: Battle, switch: Pokemon, opp_switch: bool) -> float:
+    def get_switch_score(self, battle: Battle, switch: Pokemon) -> float:
         '''
         Provides a score of how well a Pokemon would be as a switch into the battle. Considers your pokemon, your team, your opponents pokemon, and your opponents team.
         
         Args:
             battle (Battle): The current battle object
             switch (Pokemon): The pokemon being looked into as a switching option
-            opp_switch (bool): True if evaluating your opponent's possible switch
         Returns:
-            float: A score for the switch (0 - 1)
+            float: A score for the switch
         '''
         # Get eval_against
-        eval_against: Optional[Pokemon] = battle.active_pokemon if self.will_opponent_switch(battle) > 0.6 and opp_switch else self.guess_opponent_switch(battle)
+        eval_against: Optional[Pokemon] = battle.opponent_active_pokemon if self.will_opponent_switch(battle) > 0.6 else self.guess_opponent_switch(battle)
         
         # Check that switch is valid
         if switch == None or eval_against == None:
@@ -176,16 +281,9 @@ class CustomAgent(Player):
             # Get comparison
             comp: float = (cur_opp_mult/opp_mult) * (mon_mult/cur_mon_mult)
             
-            # Calculate score
-            if cur_opp_mult > 2 and opp_mult <= 2:
-                score: float = 1.0
-            elif cur_opp_mult > 1 and opp_mult 
-            
-            # Return score
-            return score
-            
-            
-        
+            # Return comp
+            return comp
+
     def will_opponent_switch(self, battle: Battle) -> float:
         '''
         Attempts to guess if the opponent is going to switch
@@ -218,12 +316,85 @@ class CustomAgent(Player):
                 swap_odds: float = 1.0 if comp > 4 else (0.0 if comp < 1 else ((comp - 1) / 3))
                 
                 # Add likelihood to list
-                self.switch_guesses.append((swap_odds, False))
+                if self.record_guess:
+                    self.switch_guesses.append((swap_odds, False))
+                    self.record_guess = False
+                
+                # TODO Adjust accuracy for past guesses 
                 
                 # Return swap_odds
                 return swap_odds
             else:
                 return 0.0   
+    
+    class TurnState():
+        
+        def __init__(self, battle: Battle):
+            self._battle_state: Battle = deepcopy(battle)
+            self._mon: Pokemon = deepcopy(battle.active_pokemon)
+            self._opp: Pokemon = deepcopy(battle.opponent_active_pokemon)
+            
+        def get_state(self):
+            '''
+            Returns current state of the battle
+            
+            Args:
+                None
+            Returns:
+                Battle: The battle object (preserved)
+            '''
+            return self._battle_state
+        
+        def mon_fainted(self, other) -> bool:
+            '''
+            Checks if our current pokemon fainted
+            
+            Args:
+                other: The next TurnState object (being compared to)
+            Returns:
+                bool: True if our mon fainted
+            '''
+            # Find pokemon
+            for mon in other._battle_state.team.values():
+                if self._mon.species == mon.species:
+                    if self._mon.fainted or mon.fainted:
+                        return True
+                    else:
+                        return False
+            return False
+        
+        def opp_fainted(self, other) -> bool:
+            '''
+            Checks if their current pokemon fainted
+            
+            Args:
+                other: The next TurnState object (being compared to)
+            Returns:
+                bool: True if their mon fainted
+            '''
+            # Find pokemon
+            for mon in other._battle_state.opponent_team.values():
+                if self._opp.species == mon.species:
+                    if self._opp.fainted or mon.fainted:
+                        return True
+                    else:
+                        return False
+            return False
+        
+        def opp_switched(self, other, last_move_d_tail) -> bool:
+            '''
+            Checks if they switched
+            
+            Args:
+                other: The next TurnState object (being compared to)
+            Returns:
+                bool: True if they switched
+            '''
+            # Find pokemon
+            if self._opp.species != other._opp.species and not self.opp_fainted(other) and not last_move_d_tail:
+                return True
+            else:
+                return False
             
     def get_opp_team_total(self, battle: Battle) -> list[Pokemon]:
         '''
@@ -448,13 +619,14 @@ class CustomAgent(Player):
         defense: float
         
         # Get opponent pokemons estimated stats
-        opp_st = self.estimate_stats(opp)
+        mon_st = self.get_stats(mon)
+        opp_st = self.get_stats(opp)
         
         # Consider whether physical or special
         if move.category == MoveCategory.PHYSICAL:
             
             # Get attack & defense stat
-            attack = mon.stats['atk'] * (((mon.boosts['atk']+2)/2) if mon.boosts['atk'] > 0 else (2/(2 - mon.boosts['atk'])))
+            attack = mon_st['atk'] * (((mon.boosts['atk']+2)/2) if mon.boosts['atk'] > 0 else (2/(2 - mon.boosts['atk'])))
             defense = opp_st['def'] * (((opp.boosts['def']+2)/2) if opp.boosts['def'] > 0 else (2/(2 - opp.boosts['def'])))
             
             # Consider weather
@@ -464,7 +636,7 @@ class CustomAgent(Player):
         elif move.category == MoveCategory.SPECIAL:
             
             # Get attack & defense stat
-            attack = mon.stats['spa'] * (((mon.boosts['spa']+2)/2) if mon.boosts['spa'] > 0 else (2/(2 - mon.boosts['spa'])))
+            attack = mon_st['spa'] * (((mon.boosts['spa']+2)/2) if mon.boosts['spa'] > 0 else (2/(2 - mon.boosts['spa'])))
             defense = opp_st['spd'] * (((opp.boosts['spd']+2)/2) if opp.boosts['spd'] > 0 else (2/(2 - opp.boosts['spd'])))
             
             # Consider weather
@@ -762,4 +934,16 @@ class CustomAgent(Player):
         # Return is_special
         return is_special
         
+    def get_stats(self, mon: Pokemon) -> dict[str, int]:
+        '''
+        Returns the stats of the mon, known if possible, estimated if not
         
+        Args:
+            mon (Pokemon): The pokemon to get stats of
+        Returns:
+            dict[str, int]: List of stats
+        '''      
+        if list(mon.stats.values())[0] != None:
+            return mon.stats
+        else:
+            return self.estimate_stats(mon)
