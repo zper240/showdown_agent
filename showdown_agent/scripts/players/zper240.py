@@ -88,7 +88,7 @@ class CustomAgent(Player):
         ## Testing Booleans
         self.full_random = False
         self.spec_strat = True
-        self.stat_moves = True
+        self.stat_moves = False
         self.smart_switch = True
         
         ## Initialise
@@ -111,6 +111,8 @@ class CustomAgent(Player):
             self.opp_switch_team = False
             self.switch_guesses = []
             self.turns = [self.TurnState(battle_obj)]
+            # for mon in battle_obj.teampreview_opponent_team:
+            #     print(mon.species)
             # print()
             # print()
             
@@ -607,7 +609,7 @@ class CustomAgent(Player):
     def get_switch_score(self, battle: Battle, switch: Pokemon):
 
         # Get pokemon to evaluate against
-        eval_against = battle.opponent_active_pokemon
+        eval_against: Pokemon = battle.opponent_active_pokemon
 
         # Sanity checks
         if switch is None or eval_against is None:
@@ -617,6 +619,10 @@ class CustomAgent(Player):
         # If the switch Pokémon would die before acting, score is 0
         if self.will_die_switch(battle, switch) and switch.species != battle.active_pokemon.species:
             # print("get_switch_score - 2 for " + switch.species + " against " + eval_against.species +  ": " + str(0.0))
+            return 0.0
+        
+        # If opposite pokemon is zaciancrown, kyogre is NOT a good option
+        if switch.species == 'kyogre' and eval_against.species == 'zacian' and PokemonType.FAIRY in eval_against.types:
             return 0.0
 
         # Calculate type multipliers
