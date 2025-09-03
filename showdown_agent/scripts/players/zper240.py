@@ -106,32 +106,55 @@ class CustomAgent(Player):
         action: Optional[SingleBattleOrder]
         
         # At the start of each battle, set switch_team to False. Will be set to True if the opposing team switches without a pokemon fainting.
-        if battle._turn == 1:
+        if battle_obj.turn == 1:
+            self.last_turn = 1
             self.opp_switch_team = False
             self.switch_guesses = []
             self.turns = [self.TurnState(battle_obj)]
-            print()
-            print()
+            # print()
+            # print()
             
         # Check if switch team and record turn
-        elif self.last_turn != battle_obj.turn:
+        elif self.last_turn != battle_obj.turn and battle_obj.turn > 1:
+            self.last_turn = battle_obj.turn
             self.turns.append(self.TurnState(battle_obj))
+            # print(len(self.turns))
             if not self.opp_switch_team:
                 self.opp_switch_team = self.turns[-1].opp_switched(self.turns[-2],self.last_move != self.create_order(Move('dragontail',9)))
             if self.turns[-1].mon_fainted(self.turns[-2]):
                 # print("Mon fainted!")
                 pass
-            
+        # print()
+        # print(battle_obj.turn)
+        
         if battle_obj.active_pokemon != None and battle_obj.opponent_active_pokemon != None and not self.full_random:
             
             # Get best move:
-            dam_move: Move = self.get_best_move(battle)
+            dam_move: Move = self.get_best_move(battle_obj)
             
             # Get best switch
-            switch = self.get_ideal_switch(battle)
+            switch = self.get_ideal_switch(battle_obj)
             
             # Get if should switch
-            should_switch: bool = self.should_switch(battle, switch) and self.smart_switch
+            should_switch: bool = self.should_switch(battle_obj, switch) and self.smart_switch
+            
+            # Get specific strategies
+            if self.spec_strat and (not should_switch or not (battle_obj.active_pokemon.species == 'calyrexice' and Field.TRICK_ROOM in battle_obj.fields.keys())):
+                match battle.active_pokemon.species:
+                    case 'kyogre':
+                        action = self.kyogre_strat(battle)
+                    case 'necrozmaduskmane':
+                        action = self.necrozma_strat(battle)
+                    case 'koraidon':
+                        action = self.koraidon_strat(battle)
+                    case 'calyrexice':
+                        action = self.calyrex_strat(battle)
+                    case 'landorustherian':
+                        action = self.landorus_strat(battle)
+                    case 'arceusfairy':
+                        action = self.arceus_strat(battle)
+                    case _:
+                        pass
             
             # Make move
             if dam_move != None and not should_switch and not battle.active_pokemon.fainted:
@@ -144,9 +167,124 @@ class CustomAgent(Player):
 
         self.last_move = action
         
-        print(action)
+        # print(action)
         return action
     
+    def kyogre_strat(self, battle: Battle) -> Optional[SingleBattleOrder]:
+        # Check to do calm mind
+        if 'calmmind' in [mov.id for mov in battle.available_moves] and battle.active_pokemon.current_hp_fraction > (0.7 - (0.3 * max(min(sum(battle.active_pokemon.boosts.values())/10,1),0))) and sum([(0 if val < 0 else val) for val in battle.active_pokemon.boosts.values()]) < 11 and self.is_resistant(battle) and not self.will_die_switch(battle, battle.active_pokemon):
+            for mov in battle.available_moves:
+                if mov.id == 'calmmind':
+                    return self.create_order(mov)
+        
+        # Otherwise return None
+        return None
+    
+    def necrozma_strat(self, battle: Battle) -> Optional[SingleBattleOrder]:
+        # Check to do morning sun
+        if 'morningsun' in [mov.id for mov in battle.available_moves] and battle.active_pokemon.current_hp_fraction <= 0.55 and self.can_heal(battle):
+            for mov in battle.available_moves:
+                if mov.id == 'morningsun':
+                    return self.create_order(mov)
+        
+        # Check to do dragon dance
+        if 'dragondance' in [mov.id for mov in battle.available_moves] and battle.active_pokemon.current_hp_fraction > 0.55 and sum([(0 if val < 0 else val) for val in battle.active_pokemon.boosts.values()]) < 11 and not self.is_resistant(battle) and self.will_die_switch(battle, battle.active_pokemon):
+            for mov in battle.available_moves:
+                if mov.id == 'dragondance':
+                    return self.create_order(mov)
+        
+        # Otherwise return None
+        return None
+    
+    def koraidon_strat(self, battle: Battle) -> Optional[SingleBattleOrder]:
+        # Get number of alive pokemon
+        alive: int = 0
+        for mon in battle.team.values():
+            if not mon.fainted:
+                alive += 1
+
+        # If last pokemon, choose last move wisely
+        best_min_effec: float = 0
+        best_move: Optional[Move] = None
+        if alive == 1:
+            for mov in battle.available_moves:
+                min_effec: float = 10
+                for mon in self.get_opp_team_total(battle):
+                    if not mon.fainted and min_effec > mon.damage_multiplier(mov):
+                        min_effec = mon.damage_multiplier(mov)
+                if min_effec > best_min_effec:
+                    best_min_effec = min_effec
+                    best_move = mov
+        
+        # Return best_move
+        return best_move if best_move == None else self.create_order(best_move)
+    
+    def calyrex_strat(self, battle: Battle) -> Optional[SingleBattleOrder]:
+        # Check if trick_room is up
+        if not Field.TRICK_ROOM in battle.fields.keys():
+            for mov in battle.available_moves:
+                if mov.id == 'trickroom':
+                    return self.create_order(mov)
+                
+        # Check if reasonable to do swordsdance
+        if 'swordsdance' in [mov.id for mov in battle.available_moves] and battle.active_pokemon.current_hp_fraction > 0.65 and sum(battle.active_pokemon.boosts['atk']) < 4 and self.is_resistant(battle) and not self.will_die_switch(battle, battle.active_pokemon):
+            for mov in battle.available_moves:
+                if mov.id == 'swordsdance':
+                    return self.create_order(mov)
+        
+        # Otherwise return None
+        return None
+    
+    def landorus_strat(self, battle: Battle) -> Optional[SingleBattleOrder]:
+        # Check if against other lead mon
+        if battle.opponent_active_pokemon.species in [mon.species for mon in self.lead_mons]:
+            # For deoxysspeed and eternatus, do normal (damage) move
+            if battle.opponent_active_pokemon.species.species in ['eternatus','deoxysspeed']:
+                return None
+            # Otherwise use taunt (on turn 1)
+            elif battle.turn == 1:
+                for mov in battle.available_moves:
+                    if mov.id == 'taunt':
+                        return self.create_order(mov)
+        
+        # Check for stealth rocks
+        if not SideCondition.STEALTH_ROCK in battle.side_conditions.keys() and (self.is_faster(battle, battle.active_pokemon, battle.opponent_active_pokemon) or self.is_resistant(battle)):
+            for mov in battle.available_moves:
+                if mov.id == 'stealthrock':
+                    return self.create_order(mov)
+        
+        # Otherwise return None
+        return None
+    
+    def arceus_strat(self, battle: Battle) -> Optional[SingleBattleOrder]:
+        # Check to do recover
+        if 'recover' in [mov.id for mov in battle.available_moves] and battle.active_pokemon.current_hp_fraction <= 0.6 and self.can_heal(battle):
+            for mov in battle.available_moves:
+                if mov.id == 'recover':
+                    return self.create_order(mov)
+        
+        # Check to do dragon tail
+        if 'dragontail' in [mov.id for mov in battle.available_moves] and sum([(0 if val < 0 else val) for val in battle.opponent_active_pokemon.boosts.values()]) > 2:
+            for mov in battle.available_moves:
+                if mov.id == 'dragontail':
+                    return self.create_order(mov)
+        
+        # Otherwise return None
+        return None
+    
+    def can_heal(self, battle: Battle) -> bool:
+        '''
+        Returns true if a heal can be successfully done
+        '''
+        # Heal is worth it
+        worth: bool = self.get_most_damage(battle, True) < 0.5 * battle.active_pokemon.max_hp
+        
+        # Can heal before dying
+        heal_pos: bool = self.is_faster(battle.active_pokemon, battle.opponent_active_pokemon) or self.get_most_damage(battle, True) < battle.active_pokemon.current_hp
+        
+        # Return results
+        return worth and heal_pos
+        
     def get_most_damage(self, battle: Battle, for_opp: bool = False, switch_mon: Optional[Pokemon] = None) -> float:
         '''
         Gets the most damage able to be done
@@ -165,7 +303,7 @@ class CustomAgent(Player):
         # Get highest damage
         if len(eval_for.moves) < 1:
             return -1.0
-        move_list: list[Move] = list(eval_for.moves.values()) if switch_mon == None and not for_opp else battle.available_moves
+        move_list: list[Move] = list(eval_for.moves.values()) if switch_mon != None or for_opp else battle.available_moves
         highest_dam: float = -1.0
         
         for move in move_list:
@@ -213,7 +351,7 @@ class CustomAgent(Player):
                 highest_dam = possible_dam
 
         # Consider status moves
-        if not for_opp and switch_mon == None:
+        if not for_opp and switch_mon == None and self.stat_moves:
             heal_move: Optional[Move] = None
             stat_move: Optional[Move] = None
             for mov in battle.available_moves:
@@ -228,7 +366,7 @@ class CustomAgent(Player):
             if heal_move != None and battle.active_pokemon.current_hp_fraction < 0.55 and self.get_most_damage(battle, True) < battle.active_pokemon.max_hp * 0.5:
                 return heal_move
             # print([str(stat_move), str(battle.active_pokemon.current_hp_fraction), str(self.is_resistant(battle)), str(self.get_best_mult(battle.active_pokemon, battle.opponent_active_pokemon)), str(self.will_die_switch(battle, battle.active_pokemon)), battle.active_pokemon.species, battle.opponent_active_pokemon.species])
-            if stat_move != None and battle.active_pokemon.current_hp_fraction > 0.65 and self.is_resistant(battle) and not self.will_die_switch(battle, battle.active_pokemon) and sum(battle.active_pokemon.boosts.values()) < 9:
+            if stat_move != None and battle.active_pokemon.current_hp_fraction > 0.55 and self.is_resistant(battle) and not self.will_die_switch(battle, battle.active_pokemon) and sum([(0 if val < 0 else val) for val in battle.active_pokemon.boosts.values()]) < 9:
                 return stat_move
         
         # Return highest damage move
@@ -266,7 +404,7 @@ class CustomAgent(Player):
         dam: float = self.get_most_damage(battle, True, switch_mon)
         
         if dam <= 0:
-            # print(["will_die_switch-2",])
+            # print(["will_die_switch-2",switch_mon.current_hp_fraction < 0.35 if self.is_faster(battle, switch_mon, battle.opponent_active_pokemon) else switch_mon.current_hp_fraction < 0.5])
             return switch_mon.current_hp_fraction < 0.35 if self.is_faster(battle, switch_mon, battle.opponent_active_pokemon) else switch_mon.current_hp_fraction < 0.5
         
         # Get multiplier
@@ -327,7 +465,7 @@ class CustomAgent(Player):
         if hazard_penalty >= battle.active_pokemon.current_hp_fraction:
             # print("False - 2")
             return False
-        if self.will_die_switch(battle, mon):
+        if self.will_die_switch(battle, mon) and battle.active_pokemon.current_hp_fraction < 0.4:
             # print("False - 3")
             return False
         if self.will_ko(battle, mon) and self.is_faster(battle, mon, battle.opponent_active_pokemon) and battle.active_pokemon.fainted:
@@ -422,7 +560,7 @@ class CustomAgent(Player):
         switch: Optional[Pokemon] = None
         
         # Check if current pokemon can OHKO
-        if self.will_ko(battle, battle.active_pokemon) and self.is_faster(battle, battle.active_pokemon, battle.opponent_active_pokemon):
+        if self.will_ko(battle, battle.active_pokemon) and self.is_faster(battle, battle.active_pokemon, battle.opponent_active_pokemon) and not battle.active_pokemon.fainted:
             return battle.active_pokemon
         
         # Iterate through all Pokemon
@@ -478,7 +616,7 @@ class CustomAgent(Player):
         
         # If the switch is the same species as current, slightly reduce score
         if switch.species == battle.active_pokemon.species:
-            comp *= 1 + sum(battle.active_pokemon.boosts.values()) / 2
+            comp *= 1 + sum(battle.active_pokemon.boosts.values())/1.5
             
         # print("get_switch_score(" + str([mon_mult, opp_mult, cur_mon_mult, cur_opp_mult, comp]) + ") for " + switch.species + " against " + eval_against.species +  ": " + str(comp))
 

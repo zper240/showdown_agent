@@ -122,7 +122,7 @@ def gather_bots():
 
 
 async def cross_evaluate(agents: List[Player]):
-    return await pke.cross_evaluate(agents, n_challenges=1) # TODO Number of challenges
+    return await pke.cross_evaluate(agents, n_challenges=100) # TODO Number of challenges
 
 
 def evalute_againts_bots(players: List[Player]):
