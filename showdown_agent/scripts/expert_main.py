@@ -86,14 +86,14 @@ def gather_bots():
     bot_teams = {}
 
     for team_file in os.listdir(bot_teams_folders):
-        if team_file.endswith(".txt"):
+        if team_file.endswith(".txt") and len(team_file.split('uber')) > 1: # TODO Limit to only uber
             with open(
                 os.path.join(bot_teams_folders, team_file), "r", encoding="utf-8"
             ) as file:
                 bot_teams[team_file[:-4]] = file.read()
 
     for module_name in os.listdir(bot_folders):
-        if module_name.endswith(".py"):
+        if module_name.endswith(".py") and len(module_name.split('simple')) > 1: # TODO Limit to only simple
             module_path = f"{bot_folders}/{module_name}"
 
             spec = importlib.util.spec_from_file_location(module_name, module_path)
@@ -122,7 +122,7 @@ def gather_bots():
 
 
 async def cross_evaluate(agents: List[Player]):
-    return await pke.cross_evaluate(agents, n_challenges=3)
+    return await pke.cross_evaluate(agents, n_challenges=2) # TODO Number of challenges
 
 
 def evalute_againts_bots(players: List[Player]):

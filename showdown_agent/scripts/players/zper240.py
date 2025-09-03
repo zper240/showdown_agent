@@ -75,14 +75,23 @@ IVs: 0 Spe
 class CustomAgent(Player):
     
     def __init__(self, *args, **kwargs):
+        ## Important Info
         self.opp_switch_team: bool = False
         self.switch_guesses: list[tuple[float, bool]] = []
         self.turns = []
         self.last_turn = 0
         self.record_guess = True
         self.last_move: Optional[SingleBattleOrder] = None
-        self.lead_mons: list[Pokemon] = [Pokemon(9, species='Landorus-Therian'),Pokemon(9, species='Glimmora'),Pokemon(9, species='Great Tusk'),Pokemon(9, species='Deoxys-Speed')]
+        self.lead_mons: list[Pokemon] = [Pokemon(9, species='Landorus-Therian'),Pokemon(9, species='Glimmora'),Pokemon(9, species='Great Tusk'),Pokemon(9, species='Deoxys-Speed'),Pokemon(9, species='Eternatus')]
         print(self.lead_mons)
+        
+        ## Testing Booleans
+        self.full_random = False
+        self.spec_strat = True
+        self.stat_moves = True
+        self.smart_switch = True
+        
+        ## Initialise
         super().__init__(team=team, *args, **kwargs)
         
     def teampreview(self, battle: AbstractBattle):
@@ -112,15 +121,18 @@ class CustomAgent(Player):
             if not self.opp_switch_team:
                 self.opp_switch_team = self.turns[-1].opp_switched(self.turns[-2],self.last_move != self.create_order(Move('dragontail',9)))
             if self.turns[-1].mon_fainted(self.turns[-2]):
-                print("Mon fainted!")
+                # print("Mon fainted!")
+                pass
             
-        if battle_obj.active_pokemon != None and battle_obj.opponent_active_pokemon != None and not battle_obj.active_pokemon.fainted:
+        if battle_obj.active_pokemon != None and battle_obj.opponent_active_pokemon != None and not self.full_random:
             
             # Get best move:
             dam_move: Move = self.get_best_move(battle)
             
             # Get best switch
             switch = self.get_ideal_switch(battle)
+            
+            should_switch: bool = self.should_switch(battle, switch) and self.smart_switch
             
             # Make move
             if dam_move != None:
@@ -137,28 +149,134 @@ class CustomAgent(Player):
         print(action)
         return action
     
-    def get_best_move(self, battle: Battle) -> Optional[Move]:
+    def get_most_damage(self, battle: Battle, for_opp: bool = False, switch_mon: Optional[Pokemon] = None) -> float:
+        '''
+        Gets the most damage able to be done
+        
+        Args:
+            battle (Battle): The current battle object
+            for_opp (bool): True if analysing for opponent - default False
+            switch_mon (Pokemon): Mon analysed to switch into - default None (means analyse pokemon currently in battle)
+        Returns:
+            float: The damage done
+        '''
+        # Get pokemon to evaluate
+        eval_for: Pokemon = (switch_mon if switch_mon != None else battle.active_pokemon) if not for_opp else battle.opponent_active_pokemon
+        eval_against: Pokemon = battle.opponent_active_pokemon if not for_opp else (switch_mon if switch_mon != None else battle.active_pokemon)
+        
+        # Get highest damage
+        if len(eval_for.moves) < 1:
+            return -1.0
+        move_list: list[Move] = list(eval_for.moves.values())
+        highest_dam: float = -1.0
+        
+        for move in move_list:
+            possible_dam: float = self.estimate_damage(eval_for, eval_against, move, battle)
+            if possible_dam > highest_dam:
+                highest_dam = possible_dam
+                
+        # Return highest damage
+        return highest_dam
+    
+    def get_best_move(self, battle: Battle, for_opp: bool = False, switch_mon: Optional[Pokemon] = None) -> Optional[Move]:
         '''
         Gets the highest damaging move
         
         Args:
             battle (Battle): The current battle object
+            for_opp (bool): True if analysing for opponent - default False
+            switch_mon (Pokemon): Mon analysed to switch into - default None (means analyse pokemon currently in battle)
         Returns:
             Optional[Move]: The highest damaging move.
         '''
+        # Define healing moves
+        healing_moves: list[str] = ['healorder','lunarblessing','milkdrink','moonlight','morningsun','purify','recover','rest','roost','shoreup','slackoff','softboiled','strengthsap','synthesis']
+
+        # Get pokemon to evaluate
+        eval_for: Pokemon = (switch_mon if switch_mon != None else battle.active_pokemon) if not for_opp else battle.opponent_active_pokemon
+        eval_against: Pokemon = battle.opponent_active_pokemon if not for_opp else (switch_mon if switch_mon != None else battle.active_pokemon)
+        
         # Get damage for all moves
-        highest_move: Move = list(battle.active_pokemon.moves.values())[0]
+        if len(eval_for.moves) < 1:
+            return None
+        move_list: list[Move] = list(eval_for.moves.values())
+        highest_move: Move = move_list[0]
         highest_dam: float = -1.0
-        for move in battle.available_moves:
-            possible_dam: float = self.estimate_damage(battle.active_pokemon, battle.opponent_active_pokemon, move, battle)
+        
+        for move in move_list:
+            possible_dam: float = self.estimate_damage(eval_for, eval_against, move, battle)
             if possible_dam > highest_dam:
                 highest_move = move
                 highest_dam = possible_dam
-                
+
+        # Consider status moves
+        if not for_opp and switch_mon == None:
+            heal_move: Optional[Move] = None
+            stat_move: Optional[Move] = None
+            for mov in battle.available_moves:
+                if mov.category == MoveCategory.STATUS and mov.id != 'trickroom':
+                    if mov.id in healing_moves and heal_move == None:
+                        heal_move = mov
+                    elif stat_move == None:
+                        stat_move = mov
+                if heal_move != None and stat_move != None:
+                    break
+            # Do heal or status moves
+            if heal_move != None and battle.active_pokemon.current_hp_fraction < 0.55 and self.get_most_damage(battle) < battle.active_pokemon.max_hp * 0.5:
+                return heal_move
+            if stat_move != None and battle.active_pokemon.current_hp_fraction > 0.7 and self.is_resistant(battle) and not self.will_die_switch(battle, battle.active_pokemon):
+                return stat_move
+        
+        # Return highest damage move
         if highest_dam != -1.0:
             return highest_move
         else:
             return None
+        
+    def is_resistant(self, battle: Battle) -> bool:
+        '''
+        Checks if def_mon is resistant to atk_mon (to best of knowledge)
+        '''
+        typ_res: bool = self.get_best_mult(battle.active_pokemon, battle.opponent_active_pokemon) <= 1
+        
+        dam_res: bool = self.get_most_damage(battle) * 2 < battle.active_pokemon.current_hp
+        
+        return typ_res and dam_res
+    
+    def will_die_switch(self, battle: Battle, switch_mon: Pokemon) -> bool:
+        '''
+        Checks if mon will die upon switching in (or after doing status move)
+        
+        Args:
+            battle (Battle): The current battle object
+            switch_mon (Pokemon): Mon looking at being switched in
+        Returns:
+            bool: True if pokemon will die upon switching in
+        '''
+        # Check if moves are known
+        if len(battle.opponent_active_pokemon.moves) == 0:
+            return switch_mon.current_hp > 0.35 if self.is_faster(battle, switch_mon, battle.opponent_active_pokemon) else switch_mon.current_hp > 0.5
+        
+        # Get max damage of opponent move on switch mon
+        dam: float = self.get_most_damage(battle, True, switch_mon)
+        
+        # Get multiplier
+        mult: float = 1 if self.is_faster(battle, switch_mon, battle.opponent_active_pokemon) else (2 if switch_mon.species == battle.active_pokemon.species else 1.5)
+        
+        # Check if does too much damage
+        return dam * mult >= switch_mon.current_hp
+    
+    def will_ko(self, battle: Battle, mon: Pokemon) -> bool:
+        '''
+        Checks if it will knockout in one move.
+        
+        Args:
+            battle (Battle): The current battle object
+            mon (Pokemon): Pokemon being looked into
+        Returns:
+            bool: True if will OHKO
+        '''
+        return self.get_most_damage(battle, False, mon) > self.estimate_stats(battle.opponent_active_pokemon)['hp'] * battle.opponent_active_pokemon.current_hp_fraction
     
     def should_switch(self, battle: Battle, mon: Optional[Pokemon]) -> bool:
         '''
@@ -192,8 +310,10 @@ class CustomAgent(Player):
                     pass
         if hazard_penalty >= battle.active_pokemon.current_hp_fraction:
             return False
-        if (self.estimate_damage(battle.active_pokemon, battle.opponent_active_pokemon, self.get_best_move(battle), battle) > (self.estimate_stats(battle.opponent_active_pokemon)['hp'] * battle.opponent_active_pokemon.current_hp_fraction)) and ((battle.active_pokemon.stats['spe'] > self.estimate_stats(battle.opponent_active_pokemon)['spe']) ^ (not battle.fields.get("trickroom", 0) > 0)):
+        if self.will_die_switch(battle, mon):
             return False
+        if self.will_ko(battle, mon) and self.is_faster(battle, mon, battle.opponent_active_pokemon) and battle.active_pokemon.fainted:
+            return True
         
         # Get switch score
         eval_against: Optional[Pokemon] = battle.active_pokemon if self.will_opponent_switch(battle) > 0.6 else self.guess_opponent_switch(battle)
@@ -203,6 +323,9 @@ class CustomAgent(Player):
         # If switch score is much higher than current score, switch
         if cur_sc > swi_sc + 1 or cur_sc > 2 * swi_sc:
             return True
+        # If current score is much higher than switch score, don't switch
+        if swi_sc > cur_sc + 1 or swi_sc > 2 * cur_sc:
+            return False
         
         # Get opp_mult ratio and mon_mult ratio
         mon_mult: float = self.get_best_mult(eval_against, mon) # How good my pokemon is against their's
@@ -229,6 +352,33 @@ class CustomAgent(Player):
             return True
         else:
             return False
+
+    def is_faster(self, battle: Battle, mon_1: Pokemon, mon_2: Pokemon) -> bool:
+        '''
+        Returns true if mon_1 is faster than mon_2
+
+        Args:
+            battle (Battle): The current battle object
+            mon_1 (Pokemon): The first pokemon
+            mon_2 (Pokemon): The second pokemon
+        Returns:
+            bool: True if mon_1 is faster than mon_2
+        '''
+        # Get speeds
+        spe_1: float = self.get_stats(mon_1) * (((mon_1.boosts['spe']+2)/2) if mon_1.boosts['spe'] > 0 else (2/(2 - mon_1.boosts['spe'])))
+        spe_2: float = self.get_stats(mon_2) * (((mon_2.boosts['spe']+2)/2) if mon_2.boosts['spe'] > 0 else (2/(2 - mon_2.boosts['spe'])))
+        
+        # Consider choicescarf
+        if mon_1.item == 'choicescarf':
+            spe_1 *= 1.5
+        if mon_2.item == 'choicescarf':
+            spe_2 *= 1.5
+        
+        # Compare speeds
+        if Field.TRICK_ROOM in battle.fields.keys():
+            return spe_2 > spe_1
+        else:
+            return spe_1 > spe_2
         
     def get_ideal_switch(self, battle: Battle) -> Optional[Pokemon]:
         '''
@@ -271,6 +421,8 @@ class CustomAgent(Player):
         # Check that switch is valid
         if switch == None or eval_against == None:
             return 0.0
+        elif self.will_die_switch(battle, switch) and switch.species != battle.active_pokemon.species:
+            return 0.0
         else:
             # Get mults
             mon_mult: float = self.get_best_mult(eval_against, switch) # How good my pokemon is against their's
@@ -280,6 +432,10 @@ class CustomAgent(Player):
             
             # Get comparison
             comp: float = (cur_opp_mult/opp_mult) * (mon_mult/cur_mon_mult)
+
+            # Consider boosts on active pokemon
+            if switch.species == battle.active_pokemon.species:
+                comp *= (1 + float(sum(battle.active_pokemon.boosts.values()))/2)
             
             # Return comp
             return comp
@@ -320,7 +476,8 @@ class CustomAgent(Player):
                     self.switch_guesses.append((swap_odds, False))
                     self.record_guess = False
                 
-                # TODO Adjust accuracy for past guesses 
+                # Adjust accuracy for past guesses - Do not do anymore
+                swap_odds = 0
                 
                 # Return swap_odds
                 return swap_odds
@@ -504,17 +661,6 @@ class CustomAgent(Player):
         
         # Return the best switch
         return best_mon
-        
-    def should_switch(self, battle: Battle, ideal_mon: Pokemon) -> bool:
-        '''
-        Return a boolean indication of whether or not switching is the best choice in the current situation
-        
-        Args:
-            battle (Battle): The current battle object.
-            ideal_mon (Pokemon): The pokemon that would be the best to switch to (as defined by ideal_switch)
-        Returns:
-            bool: Whether we should switch out our current pokemon for ideal_mon
-        '''
     
     def get_best_mult(self, def_mon: Pokemon, atk_mon: Pokemon) -> float:
         '''
