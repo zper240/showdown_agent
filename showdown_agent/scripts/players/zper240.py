@@ -1,8 +1,12 @@
-from poke_env.battle import AbstractBattle, Battle, Effect, EmptyMove, Field, Move, MoveCategory, Pokemon, PokemonGender, PokemonType, SideCondition, Status, Target, Weather
+from poke_env.battle import AbstractBattle, Battle, Field, Move, MoveCategory, Pokemon, PokemonType, SideCondition, Status, Target, Weather
 from poke_env.player import Player
-from poke_env.player.battle_order import BattleOrder, DefaultBattleOrder, DoubleBattleOrder, SingleBattleOrder
+from poke_env.player.battle_order import SingleBattleOrder
 from typing import Optional
 from copy import deepcopy
+LOGGING: bool = True
+if LOGGING:
+    import json
+    import os
 
 team = """
 Crunchie (Landorus-Therian) @ Rocky Helmet  
@@ -85,6 +89,11 @@ class CustomAgent(Player):
         self.lead_mons: list[Pokemon] = [Pokemon(9, species='Landorus-Therian'),Pokemon(9, species='Glimmora'),Pokemon(9, species='Great Tusk'),Pokemon(9, species='Deoxys-Speed'),Pokemon(9, species='Eternatus')]
         # print(self.lead_mons)
         
+        # Record Battle Logs
+        self.battle_num = 1
+        self.battle_info = {'battles': []}
+        self.bat_log = {}
+        
         ## Testing Booleans
         self.full_random = False
         self.spec_strat = True
@@ -96,7 +105,31 @@ class CustomAgent(Player):
         
     def teampreview(self, battle: AbstractBattle):
         return "/team 123456"
-                
+    
+    def _battle_finished_callback(self, battle: AbstractBattle):
+        if LOGGING:
+            # Get number of mon_fainted
+            battle_obj: Battle = battle
+            mon_fainted, opp_fainted = (0,0)
+            for mon in battle_obj.opponent_team.values():
+                if mon.fainted:
+                    opp_fainted += 1
+            for mon in battle_obj.team.values():
+                if mon.fainted:
+                    mon_fainted += 1
+            
+            # Record details
+            self.bat_log['end_info'] = {'mon_fainted': mon_fainted, 'opp_fainted': opp_fainted, 'last_mon': battle_obj.active_pokemon.species, 'won': battle_obj.won}
+            
+            self.battle_info['battles'].append(self.bat_log)
+            
+            # Get file
+            with open("players/logs/logs.txt", "w") as f:
+                json.dump(self.battle_info, f, indent=4)
+
+        else:
+            pass
+        
     def choose_move(self, battle: AbstractBattle):
         
         # Make battle_obj
@@ -115,6 +148,11 @@ class CustomAgent(Player):
             #     print(mon.species)
             # print()
             # print()
+            
+            # Log data:
+            if LOGGING:
+                self.bat_log = {'battle': self.battle_num, 'start_info': {'mon': battle_obj.active_pokemon.species, 'opp': battle_obj.opponent_active_pokemon.species}, 'swaps': 0}
+                self.battle_num += 1
             
         # Check if switch team and record turn
         elif self.last_turn != battle_obj.turn and battle_obj.turn > 1:
@@ -167,11 +205,15 @@ class CustomAgent(Player):
                 if dam_move != None and not should_switch and not battle.active_pokemon.fainted:
                     action = self.create_order(dam_move)
                 else:
+                    if LOGGING:
+                        self.bat_log['swaps'] += 1
                     action = self.create_order(switch)
         
         else:
             # print("Random Move!")
             action = self.choose_random_move(battle)
+            if LOGGING and 'switch' in action.message:
+                self.bat_log['swaps'] += 1
 
         self.last_move = action
         # print(action)

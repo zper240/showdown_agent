@@ -1,0 +1,144 @@
+{
+    "battles": [
+        {
+            "battle": 1,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 2,
+            "end_info": {
+                "mon_fainted": 1,
+                "opp_fainted": 6,
+                "last_mon": "necrozmaduskmane",
+                "won": true
+            }
+        },
+        {
+            "battle": 2,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 2,
+            "end_info": {
+                "mon_fainted": 1,
+                "opp_fainted": 6,
+                "last_mon": "necrozmaduskmane",
+                "won": true
+            }
+        },
+        {
+            "battle": 3,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 1,
+            "end_info": {
+                "mon_fainted": 1,
+                "opp_fainted": 6,
+                "last_mon": "necrozmaduskmane",
+                "won": true
+            }
+        },
+        {
+            "battle": 4,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 2,
+            "end_info": {
+                "mon_fainted": 1,
+                "opp_fainted": 6,
+                "last_mon": "necrozmaduskmane",
+                "won": true
+            }
+        },
+        {
+            "battle": 5,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 3,
+            "end_info": {
+                "mon_fainted": 1,
+                "opp_fainted": 6,
+                "last_mon": "necrozmaduskmane",
+                "won": true
+            }
+        },
+        {
+            "battle": 6,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 2,
+            "end_info": {
+                "mon_fainted": 1,
+                "opp_fainted": 6,
+                "last_mon": "necrozmaduskmane",
+                "won": true
+            }
+        },
+        {
+            "battle": 7,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 3,
+            "end_info": {
+                "mon_fainted": 2,
+                "opp_fainted": 6,
+                "last_mon": "necrozmaduskmane",
+                "won": true
+            }
+        },
+        {
+            "battle": 8,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 1,
+            "end_info": {
+                "mon_fainted": 1,
+                "opp_fainted": 6,
+                "last_mon": "necrozmaduskmane",
+                "won": true
+            }
+        },
+        {
+            "battle": 9,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 2,
+            "end_info": {
+                "mon_fainted": 1,
+                "opp_fainted": 6,
+                "last_mon": "necrozmaduskmane",
+                "won": true
+            }
+        },
+        {
+            "battle": 10,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 3,
+            "end_info": {
+                "mon_fainted": 2,
+                "opp_fainted": 6,
+                "last_mon": "necrozmaduskmane",
+                "won": true
+            }
+        }
+    ]
+}
