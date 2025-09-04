@@ -1,0 +1,1404 @@
+{
+    "battles": [
+        {
+            "battle": 1,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 9,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 2,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "calyrexice",
+                "won": false
+            }
+        },
+        {
+            "battle": 3,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "landorustherian",
+                "won": false
+            }
+        },
+        {
+            "battle": 4,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 5,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "calyrexice",
+                "won": false
+            }
+        },
+        {
+            "battle": 6,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "calyrexice",
+                "won": false
+            }
+        },
+        {
+            "battle": 7,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 8,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 9,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 9,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 17,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 0,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 11,
+            "start_info": {
+                "mon": "koraidon",
+                "opp": "arceusfairy"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 12,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 0,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 13,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 14,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 9,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "calyrexice",
+                "won": false
+            }
+        },
+        {
+            "battle": 16,
+            "start_info": {
+                "mon": "koraidon",
+                "opp": "arceusfairy"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 17,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 18,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 18,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 4,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 19,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 20,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 21,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 9,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 22,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 23,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 24,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 8,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 25,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "calyrexice",
+                "won": false
+            }
+        },
+        {
+            "battle": 26,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 16,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 27,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 28,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "landorustherian",
+                "won": false
+            }
+        },
+        {
+            "battle": 29,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "calyrexice",
+                "won": false
+            }
+        },
+        {
+            "battle": 30,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "calyrexice",
+                "won": false
+            }
+        },
+        {
+            "battle": 31,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 15,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 32,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 33,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 29,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 34,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 17,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 35,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 15,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 36,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 5,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 37,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 38,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "calyrexice",
+                "won": false
+            }
+        },
+        {
+            "battle": 39,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 12,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 40,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 41,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 42,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 4,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 43,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 44,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 12,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 45,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 46,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 19,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 47,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 48,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 50,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 0,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 51,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 16,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 52,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 17,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 53,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 9,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 55,
+            "start_info": {
+                "mon": "koraidon",
+                "opp": "eternatus"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 56,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 9,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 57,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 16,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 58,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 12,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 59,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 60,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 61,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 62,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 8,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 63,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 15,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 64,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 15,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 65,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "calyrexice",
+                "won": false
+            }
+        },
+        {
+            "battle": 66,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 67,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 16,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 68,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 12,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 69,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 8,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 70,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 9,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 71,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 72,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 73,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 9,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 74,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 16,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 75,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "landorustherian",
+                "won": false
+            }
+        },
+        {
+            "battle": 76,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 77,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 78,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 4,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 79,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 80,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 12,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 81,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 8,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 82,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "landorustherian",
+                "won": false
+            }
+        },
+        {
+            "battle": 83,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 84,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 17,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 85,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 8,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 86,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 87,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 88,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 89,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "landorustherian",
+                "won": false
+            }
+        },
+        {
+            "battle": 90,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 0,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 91,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 92,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 0,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 93,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 94,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 12,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 95,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 16,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "calyrexice",
+                "won": false
+            }
+        },
+        {
+            "battle": 96,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "koraidon"
+            },
+            "swaps": 10,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 97,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 13,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 98,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 7,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 4,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 99,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 14,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 100,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "kingambit"
+            },
+            "swaps": 12,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 3,
+                "last_mon": "koraidon",
+                "won": false
+            }
+        },
+        {
+            "battle": 101,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "arceusfairy"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "necrozmaduskmane",
+                "won": false
+            }
+        },
+        {
+            "battle": 102,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "zaciancrowned"
+            },
+            "swaps": 8,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "kyogre",
+                "won": false
+            }
+        },
+        {
+            "battle": 103,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "eternatus"
+            },
+            "swaps": 11,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 1,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        },
+        {
+            "battle": 104,
+            "start_info": {
+                "mon": "landorustherian",
+                "opp": "deoxysspeed"
+            },
+            "swaps": 12,
+            "end_info": {
+                "mon_fainted": 6,
+                "opp_fainted": 2,
+                "last_mon": "arceusfairy",
+                "won": false
+            }
+        }
+    ]
+}

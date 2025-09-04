@@ -3,7 +3,7 @@ from poke_env.player import Player
 from poke_env.player.battle_order import SingleBattleOrder
 from typing import Optional
 from copy import deepcopy
-LOGGING: bool = True
+LOGGING: bool = False
 if LOGGING:
     import json
     import os
